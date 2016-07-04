@@ -1,0 +1,3 @@
+# Seajs-test
+
+    npm install
