@@ -1,0 +1,18 @@
+define([
+    './src/img/avatar/avatar_1.png',
+    './src/img/avatar/avatar_2.png',
+    './src/img/avatar/avatar_3.png',
+    './src/img/avatar/avatar_4.png',
+    './src/img/avatar/avatar_5.png',
+    './src/img/avatar/avatar_6.png',
+    './src/img/avatar/avatar_7.png',
+    './src/img/avatar/avatar_8.png',
+    './src/img/avatar/avatar_9.png',
+    './src/img/avatar/avatar_10.png',
+    './src/img/avatar/avatar_11.png',
+    './src/img/avatar/avatar_12.png',
+    './src/img/avatar/avatar_13.png',
+    './src/img/avatar/avatar_14.png',
+    './src/img/avatar/avatar_15.png',
+    './src/img/avatar/avatar_16.png'
+]);

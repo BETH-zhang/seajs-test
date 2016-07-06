@@ -1,6 +1,7 @@
 define(function(require, exports, module) {
 
   var $ = require('jquery');
+  var avatars = require('./avatar');
 
   var CANVAS_HEIGHT = 500;
   var CANVAS_WIDTH = 900;
@@ -16,10 +17,14 @@ define(function(require, exports, module) {
   var ZOOM_DURATION = 500;
 
 
-  function User(name, options) {
-    // debugger
+  function User(name, img) {
     this.name = name;
-    this.options = options || {};
+    if(img){
+      this.img = img;
+    }else{
+      var rd = r(0, 15);
+      this.img = avatars[rd];
+    }
 
     this.el = null;
     this.width = 0;
@@ -41,7 +46,7 @@ define(function(require, exports, module) {
   module.exports = User;
 
   User.prototype.createEl = function() {
-    this.el = $('<li><div><img src="'+this.name+'"/></div></li>').appendTo('#balls');
+    this.el = $('<li><div><img src="'+this.img+'"/></div><span>'+this.name+'</span></li>').appendTo('#balls');
     this.width = this.el.width();
     this.height = this.el.height();
     this.width_c = this.el.children().width();

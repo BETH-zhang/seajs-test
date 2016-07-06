@@ -17,7 +17,7 @@ define(function(require, exports, module) {
 
       this.data = data;
       this.users = data.map(function(item) {
-        return new User(item[1], {});
+        return new User(item[0], item[1]);
       });
 
       this._bindUI();
@@ -28,7 +28,7 @@ define(function(require, exports, module) {
       $('#lucky-balls').html('');
       this.data = data;
       this.users = data.map(function(item) {
-        return new User(item[1], {});
+        return new User(item[0], item[1]);
       });
       this.isShowTips();
     },
@@ -59,8 +59,9 @@ define(function(require, exports, module) {
       $('#lucky-balls').on('click', 'li', function(e) {
         var el = $(e.target).parent().parent();
         var img = $(e.target).attr('src');
+        var name = el.find('span').text();
 
-        that.addItem(img);
+        that.addItem(name, img);
         if (trigger.getAttribute('data-action') === 'start') {
           that.hit();
         }
@@ -69,8 +70,9 @@ define(function(require, exports, module) {
 
       // bind #balls
       $('#balls').on('click', 'li', function(e) {
-        var el = $(e.target);
-        var name = el.attr('src');
+        var el = $(e.target).parent().parent();
+        var name = el.find('span').text();
+        var img = $(e.target).attr('src');
 
         for (var i = 0; i < that.users.length; i++) {
           var user = that.users[i];
@@ -142,8 +144,8 @@ define(function(require, exports, module) {
       }
     },
 
-    addItem: function(name) {
-      this.users.push(new User(name));
+    addItem: function(name, img) {
+      this.users.push(new User(name, img));
       this.isShowTips();
     },
 

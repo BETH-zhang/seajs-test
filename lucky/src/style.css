@@ -51,6 +51,10 @@ img{
   height: 500px;
 }
 
+#balls li{
+  overflow: hidden;
+}
+
 #balls li,
 #lucky-balls li {
   position: absolute;
@@ -59,13 +63,12 @@ img{
   padding: 0;
   width: 40px;
   height: 40px;
-  overflow: hidden;
+  /*overflow: hidden;*/
   font-size: 12px;
   background: #333;
-  color: #ddd;
+  color: #333;
   opacity: .8;
   text-align: center;
-  line-height: 43px;
   border-radius: 30px;
   word-break: keep-all;
   cursor: pointer;
@@ -92,12 +95,11 @@ img{
 }
 
 #balls li.selected {
-  color: #fff;
+  color: #000;
   background: #f60;
   font-size: 40px;
   height: 200px;
   width: 200px;
-  line-height: 128px;
   border-radius: 100px;
   -webkit-transition: 0.3s ease-in;
   -webkit-transition-property: width, height, font;
@@ -119,6 +121,6 @@ img{
   float: left;
   margin: 5px 10px;
   font-weight: bold;
-  color: #fff;
+  color: #666;
   background: #f60;
 }
