@@ -10,6 +10,7 @@ define(function(require){
 
 	lucky.init(data);
 
+	// 重新开始
 	$('#reStart').click(function(){
 		lucky.reset(data);
 	});
