@@ -16,11 +16,21 @@ define(function(require, exports, module) {
       $('#container').css('background', 'none');
 
       this.data = data;
-      this.users = data.map(function(name) {
-        return new User(name, data[name]);
+      this.users = data.map(function(item) {
+        return new User(item[1], {});
       });
 
       this._bindUI();
+    },
+
+    reset: function(data){
+      $('#balls').html('');
+      $('#lucky-balls').html('');
+      this.data = data;
+      this.users = data.map(function(item) {
+        return new User(item[1], {});
+      });
+      this.isShowTips();
     },
 
     _bindUI: function() {
@@ -28,6 +38,7 @@ define(function(require, exports, module) {
 
       // bind button
       var trigger = document.querySelector('#go');
+      trigger.setAttribute('data-action', 'start');
       trigger.innerHTML = trigger.getAttribute('data-text-start');
       trigger.addEventListener('click', go, false);
 
@@ -46,10 +57,10 @@ define(function(require, exports, module) {
 
       // bind #lucky-balls
       $('#lucky-balls').on('click', 'li', function(e) {
-        var el = $(e.target);
-        var name = el.text();
+        var el = $(e.target).parent().parent();
+        var img = $(e.target).attr('src');
 
-        that.addItem(name);
+        that.addItem(img);
         if (trigger.getAttribute('data-action') === 'start') {
           that.hit();
         }
@@ -59,7 +70,7 @@ define(function(require, exports, module) {
       // bind #balls
       $('#balls').on('click', 'li', function(e) {
         var el = $(e.target);
-        var name = el.text();
+        var name = el.attr('src');
 
         for (var i = 0; i < that.users.length; i++) {
           var user = that.users[i];
@@ -78,7 +89,12 @@ define(function(require, exports, module) {
       // bind keydown
       document.addEventListener('keydown', function(ev) {
         if (ev.keyCode == '32') {
-          go();
+          if(that.users.length > 0){
+            go();
+          }else{
+            trigger.setAttribute('data-action', 'start');
+            trigger.innerHTML = trigger.getAttribute('data-text-start');
+          }
         }
         else if (ev.keyCode == '27') {
           that.moveLucky();
@@ -89,29 +105,32 @@ define(function(require, exports, module) {
     },
 
     start: function() {
-      this.timer && clearTimeout(this.timer);
-      this.moveLucky();
+      if(this.users.length > 0){
+        this.timer && clearTimeout(this.timer);
+        this.moveLucky();
 
-      this.users.forEach(function(user) {
-        user.start();
-      });
+        this.users.forEach(function(user) {
+          user.start();
+        });
+      }
     },
 
     stop: function() {
       var users = this.users;
-      var z = 0, lucky = users[0];
+      if(users.length > 0){
+        var z = 0, lucky = users[0];
+        users.forEach(function(user) {
+          user.stop();
+          if (z < user.zIndex) {
+            lucky = user;
+            z = user.zIndex;
+          }
+        })
 
-      users.forEach(function(user) {
-        user.stop();
-        if (z < user.zIndex) {
-          lucky = user;
-          z = user.zIndex;
-        }
-      })
-
-      lucky.bang();
-      this.hit();
-      this.luckyUser = lucky;
+        lucky.bang();
+        this.hit();
+        this.luckyUser = lucky;
+      }
     },
 
     removeItem: function(item) {
@@ -125,6 +144,15 @@ define(function(require, exports, module) {
 
     addItem: function(name) {
       this.users.push(new User(name));
+      this.isShowTips();
+    },
+
+    isShowTips: function(){
+      if(this.users.length){
+        $('#tips').hide();
+      }else{
+        $('#tips').show();
+      }
     },
 
     moveLucky: function() {
@@ -132,8 +160,12 @@ define(function(require, exports, module) {
       if (luckyUser) {
         luckyUser.el[0].style.cssText = '';
         luckyUser.el.prependTo('#lucky-balls');
+        $(luckyUser.el).children().css('width', '');
+        $(luckyUser.el).children().css('height', '');
+
         this.removeItem(luckyUser);
         this.luckyUser = null;
+        this.isShowTips();
         return true;
       }else{
         return false;

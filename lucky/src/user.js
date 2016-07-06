@@ -17,12 +17,15 @@ define(function(require, exports, module) {
 
 
   function User(name, options) {
+    // debugger
     this.name = name;
     this.options = options || {};
 
     this.el = null;
     this.width = 0;
     this.height = 0;
+    this.width_c = 0;
+    this.height_c = 0;
     this.left = 0;
     this.top = 0;
     this.x = 0;
@@ -38,9 +41,11 @@ define(function(require, exports, module) {
   module.exports = User;
 
   User.prototype.createEl = function() {
-    this.el = $('<li>' + this.name + '</li>').appendTo('#balls');
+    this.el = $('<li><div><img src="'+this.name+'"/></div></li>').appendTo('#balls');
     this.width = this.el.width();
     this.height = this.el.height();
+    this.width_c = this.el.children().width();
+    this.height_c = this.el.children().height();
     this.background = 'rgb('+Math.ceil(r(0, 255))+', '+Math.ceil(r(0, 255))+', '+Math.ceil(r(0, 255))+')';
   }
 
@@ -85,8 +90,14 @@ define(function(require, exports, module) {
     this.el[0].style.width = BALL_WIDTH + 'px';
     this.el[0].style.height = BALL_HEIGHT + 'px';
 
+    $(this.el[0]).children().css('width', BALL_WIDTH - 10);
+    $(this.el[0]).children().css('height', BALL_HEIGHT - 10);
+
     this.width = this.el.width();
     this.height = this.el.height();
+
+    this.width_c = this.el.children().width();
+    this.height_c = this.el.children().height();
 
     this._maxTop = CANVAS_HEIGHT - this.height;
     this._maxLeft = CANVAS_WIDTH - this.width;
@@ -112,6 +123,9 @@ define(function(require, exports, module) {
     this.el[0].className = 'selected';
     this.width = LUCKY_BALL_WIDTH;
     this.height = LUCKY_BALL_HEIGHT;
+    this.width_c = LUCKY_BALL_WIDTH - 10;
+    this.height_c = LUCKY_BALL_HEIGHT - 10;
+
     this.left = (CANVAS_WIDTH - this.width) / 2;
     this.top = (CANVAS_HEIGHT - this.height) / 2;
     this.background = 'rgb('+Math.ceil(r(0, 255))+', '+Math.ceil(r(0, 255))+', '+Math.ceil(r(0, 255))+')';
@@ -121,8 +135,12 @@ define(function(require, exports, module) {
       'top': this.top,
       'width': this.width,
       'height': this.height,
-      'background': this.background
+      'background': this.background,
+      'opacity': 1
     }, ZOOM_DURATION);
+
+    $(this.el[0]).children().css('width', this.width_c);
+    $(this.el[0]).children().css('height', this.height_c);
   }
 
   User.prototype.beginHit = function() {
